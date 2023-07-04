@@ -1,4 +1,5 @@
 from collections import deque
+import math
 
 graph1 = {
 'A': ['B', 'G'] ,  
@@ -10,6 +11,8 @@ graph1 = {
 'H': ['I', 'G'] ,
 'I': ['H']
 }
+
+array1 = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
 
 # Busquedas en profundidad
 def dfsAlgIterative(graph, ini_nod, obj_nod):
@@ -86,6 +89,37 @@ def bfsAlgRecursive(graph, explored, toExplore, nodo, goal):
         
         return bfsAlgRecursive(graph, explored, toExplore, toExplore.popleft(), goal)
 
+#Busqueda binaria
+def binaryAlgIterative(array, target):
+    p_right = len(array) - 1 #Right pointer            
+    p_left = 0  #Left pointer 
+
+    while(p_left <= p_right):  #Pointers shouldn't cross
+        mid = (p_left + p_right)//2
+
+        if(array[mid] == target):
+            print('The target is on position: ')
+            return mid
+        elif(array[mid] > target):
+            p_right = mid - 1 #Move the pointer
+        elif(array[mid] < target):
+            p_left = mid + 1
+    
+    print('Error: There is not such element in the array')
+    return -1 
+            
+def binaryAlgRecursive(array, p_right, p_left ,target):
+   mid = (p_left + p_right)//2
+   #Base case:
+   if(array[mid] == target):
+       return mid
+   else:
+       if(p_left > p_right):
+           return -1
+       if(array[mid] > target):
+            return binaryAlgRecursive(array, mid-1, p_left, target)
+       if(array[mid] < target):
+            return binaryAlgRecursive(array, p_right, mid+1, target)
 
 
 
@@ -101,3 +135,6 @@ lista2 = deque(['A'])
 #print(bfsAlgRecursive(graph1, explorados, lista2, 'A', 'I'))
 #print(bfsAlgIterative(graph1, 'A', 'I'))
 
+#print(binarySAlg(array1, 23))
+r = len(array1)-1
+print(binaryAlgRecursive(array1, r, 0, 23))
