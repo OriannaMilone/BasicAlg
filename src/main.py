@@ -14,21 +14,14 @@ graph1 = {
 'I': ['H']
 }
 
-C = {
-    'A' : 3,
-    'F' : 2,
-    'E' : 1,
-    'D' : 4
-}
-
 graph2 = {
-'A': [C, 'F'] ,  
-'B': ['F','G', 'D', 'E'] , 
-'C': ['A', 'F', 'E', 'D'] , 
-'D': ['B','C'] , 
-'E': ['B', 'C', 'F'] , 
-'G': ['F', 'B'] ,
-'F': ['A', 'G', 'B', 'E', 'C']
+'A': [(3, 'C'), (2, 'F')] ,  
+'B': [(6, 'F'), (2, 'G'), (1, 'D'), (2, 'E')] , 
+'C': [(3, 'A'), (2, 'F'), (1, 'E'), (4, 'D')] , 
+'D': [(1, 'B'), (4, 'C')] , 
+'E': [(2, 'B'), (1, 'C'), (3, 'F')] , 
+'G': [(5, 'F'), (2, 'B')] ,
+'F': [(2, 'A'), (5, 'G'), (6, 'B'), (3, 'E'), (2, 'C')]
 }
 
 array1 = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
@@ -140,7 +133,6 @@ def binaryAlgRecursive(array, p_right, p_left ,target):
             return binaryAlgRecursive(array, p_right, mid+1, target)
 
 
-
 def dijkstraAlg(graph, ini_node, goal):
     matrix = {
         ini_node : [False, 0, str(ini_node)] #Matriz (Nodos: [Edo, Dist, Prev])
@@ -149,33 +141,33 @@ def dijkstraAlg(graph, ini_node, goal):
         matrix[i] = [False, inf, '?'] #Incializa la matriz con los nodos y su info
 
 
-    unexplored= [ini_node] # Cola de prioridad
+    unexplored= [(0, ini_node)] # Cola de prioridad
     heapq.heapify(unexplored)
 
 
-    while(True):
+    while(True):   
         if(len(unexplored) == 0):
             return -1 #No solution
 
-        node = heapq.heappop(unexplored) #Selecciona el elemento con mayor prioridad en la cola
+        current_distance , node = heapq.heappop(unexplored) #Selecciona el elemento con mayor prioridad en la cola
         
         if(node == goal):
             return matrix.get(node) #Devuelve la info del nodo objetivo (True, x, Nx)
         
-        if(not(matrix.get(node, 0))):
-        
-            matrix[node] = [True]
-        
-            heapq.heappush(unexplored, graph.get(node)) #Agrega a la cola de prioridad los elementos
+        if(not(matrix[node][0])):
+            matrix[node][0] = True  #El nodo ha sido explorado
+            
+            for neighbor in graph.get(node):
+                distance, nodos = neighbor
 
-            #Tengo que ver el coste de ese nodo (Más el cómo llegar a él)
-            label = matrix.get(node, 1)
-            #Tengo que compararlo con el que está anotado
-            prevNode = matrix.get(node, 2)
-            if(label > prevNode):
-                matrix[node] = C[previousNode]
-            #Si es menor (mejor) que el que está en matrix, cambiarlo, sino, next
-        
+                new_distance = current_distance + distance
+
+                if(new_distance < matrix[nodos][1]):
+                    matrix[nodos][1] = new_distance
+                    matrix[nodos][2] = node
+                    heapq.heappush(unexplored, (new_distance, nodos)) #Agrega a la cola de prioridad los elementos
+            
+   return matrix.get(goal)
 
 
 
