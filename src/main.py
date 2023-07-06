@@ -1,5 +1,7 @@
 from collections import deque
 import math
+import queue
+import heapq
 
 graph1 = {
 'A': ['B', 'G'] ,  
@@ -12,7 +14,26 @@ graph1 = {
 'I': ['H']
 }
 
+C = {
+    'A' : 3,
+    'F' : 2,
+    'E' : 1,
+    'D' : 4
+}
+
+graph2 = {
+'A': [C, 'F'] ,  
+'B': ['F','G', 'D', 'E'] , 
+'C': ['A', 'F', 'E', 'D'] , 
+'D': ['B','C'] , 
+'E': ['B', 'C', 'F'] , 
+'G': ['F', 'B'] ,
+'F': ['A', 'G', 'B', 'E', 'C']
+}
+
 array1 = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
+
+inf = 100000000000
 
 # Busquedas en profundidad
 def dfsAlgIterative(graph, ini_nod, obj_nod):
@@ -35,7 +56,6 @@ def dfsAlgIterative(graph, ini_nod, obj_nod):
         if(not(nodo in explored)):
             explored.append(nodo)
             toExplore.extend(reversed(graph.get(nodo))) # as reversed as a stack
-
 def dfsAlgRecursive(graph, toexplore, explored, nodo, goal):
     #base case
     if(nodo == goal):
@@ -72,7 +92,6 @@ def bfsAlgIterative(graph, ini_node, goal):
         if(not (nodo in explored)):
             explored.append(nodo)
             toExplore.extend(graph.get(nodo))
-
 def bfsAlgRecursive(graph, explored, toExplore, nodo, goal):
     #Caso base:
     if(nodo == goal):
@@ -106,8 +125,7 @@ def binaryAlgIterative(array, target):
             p_left = mid + 1
     
     print('Error: There is not such element in the array')
-    return -1 
-            
+    return -1        
 def binaryAlgRecursive(array, p_right, p_left ,target):
    mid = (p_left + p_right)//2
    #Base case:
@@ -123,6 +141,42 @@ def binaryAlgRecursive(array, p_right, p_left ,target):
 
 
 
+def dijkstraAlg(graph, ini_node, goal):
+    matrix = {
+        ini_node : [False, 0, str(ini_node)] #Matriz (Nodos: [Edo, Dist, Prev])
+              }
+    for i in graph:
+        matrix[i] = [False, inf, '?'] #Incializa la matriz con los nodos y su info
+
+
+    unexplored= [ini_node] # Cola de prioridad
+    heapq.heapify(unexplored)
+
+
+    while(True):
+        if(len(unexplored) == 0):
+            return -1 #No solution
+
+        node = heapq.heappop(unexplored) #Selecciona el elemento con mayor prioridad en la cola
+        
+        if(node == goal):
+            return matrix.get(node) #Devuelve la info del nodo objetivo (True, x, Nx)
+        
+        if(not(matrix.get(node, 0))):
+        
+            matrix[node] = [True]
+        
+            heapq.heappush(unexplored, graph.get(node)) #Agrega a la cola de prioridad los elementos
+
+            #Tengo que ver el coste de ese nodo (Más el cómo llegar a él)
+            label = matrix.get(node, 1)
+            #Tengo que compararlo con el que está anotado
+            prevNode = matrix.get(node, 2)
+            if(label > prevNode):
+                matrix[node] = C[previousNode]
+            #Si es menor (mejor) que el que está en matrix, cambiarlo, sino, next
+        
+
 
 
 lista = ['A']
@@ -136,5 +190,4 @@ lista2 = deque(['A'])
 #print(bfsAlgIterative(graph1, 'A', 'I'))
 
 #print(binarySAlg(array1, 23))
-r = len(array1)-1
-print(binaryAlgRecursive(array1, r, 0, 23))
+print(binaryAlgRecursive(array1, len(array1)-1, 0, 23))
