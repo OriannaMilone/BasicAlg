@@ -140,16 +140,13 @@ def dijkstraAlg(graph, ini_node, goal):
     for i in graph:
         matrix[i] = [False, inf, '?'] #Incializa la matriz con los nodos y su info
 
+    unexplored= [(0, ini_node)] 
+    heapq.heapify(unexplored)   # Cola de prioridad
 
-    unexplored= [(0, ini_node)] # Cola de prioridad
-    heapq.heapify(unexplored)
-
-
-    while(True):   
-        if(len(unexplored) == 0):
-            return -1 #No solution
-
+    while(unexplored):   
         current_distance , node = heapq.heappop(unexplored) #Selecciona el elemento con mayor prioridad en la cola
+        
+        print(f"Seleccionando nodo: {node}, distancia: {current_distance}")
         
         if(node == goal):
             return matrix.get(node) #Devuelve la info del nodo objetivo (True, x, Nx)
@@ -166,8 +163,12 @@ def dijkstraAlg(graph, ini_node, goal):
                     matrix[nodos][1] = new_distance
                     matrix[nodos][2] = node
                     heapq.heappush(unexplored, (new_distance, nodos)) #Agrega a la cola de prioridad los elementos
-            
-   return matrix.get(goal)
+        print(f"Matriz: {matrix}")       
+         
+    return matrix.get(goal)    
+
+
+
 
 
 
@@ -182,4 +183,7 @@ lista2 = deque(['A'])
 #print(bfsAlgIterative(graph1, 'A', 'I'))
 
 #print(binarySAlg(array1, 23))
-print(binaryAlgRecursive(array1, len(array1)-1, 0, 23))
+#print(binaryAlgRecursive(array1, len(array1)-1, 0, 23))
+
+
+print(dijkstraAlg(graph2, 'A', 'B'))
