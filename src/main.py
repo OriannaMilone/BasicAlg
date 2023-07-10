@@ -36,7 +36,7 @@ matrix1 = [[0, 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
 
 array1 = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
 
-inf = 100000000000
+inf = math.inf
 
 # Busquedas en profundidad
 def dfsAlgIterative(graph, ini_nod, obj_nod):
@@ -179,36 +179,28 @@ def dijkstraAlg(graph, ini_node, goal):
 
     #
 
-
-matrix2 = {
-'A': [(3, 'C'), (2, 'F')] ,  
-'B': [(6, 'F'), (2, 'G'), (1, 'D'), (2, 'E')] , 
-'C': [(3, 'A'), (2, 'F'), (1, 'E'), (4, 'D')] , 
-'D': [(1, 'B'), (4, 'C')] , 
-'E': [(2, 'B'), (1, 'C'), (3, 'F')] , 
-'G': [(5, 'F'), (2, 'B')] ,
-'F': [(2, 'A'), (5, 'G'), (6, 'B'), (3, 'E'), (2, 'C')]
-}
-
 def dijkstraAlg2(matrix, ini_node, goal):
-    #La matriz, contiene, los nodos, con sus vecinos y pesos
     register = {
-                ini_node : [False, 0, ini_node]  
+                ini_node : [False, 0, ini_node]  #Registra: Estado, Distancia, Nodo Anterior
         }
     for i in range( len(matrix.keys()) -1 ):
-            register[list(matrix.keys())[i+1]] = [False, inf, '?']
-
+            register[list(matrix.keys())[i+1]] = [False, inf, '?']  #Inicializa todos los nodos
+    print(register)
 
     unexplored = [(0, ini_node)] 
     heapq.heapify(unexplored)
+   
 
     while(True):
-        if(len(unexplored == 0)):
+        print('Vueltas:')
+        if(len(unexplored) == 0):
             return -1
         
         priority, node = heapq.heappop(unexplored) #Tomar el nodo con mayor prioridad de la cola
+        print(node)
 
         if(node == goal):
+            register[node][0] = True
             return register[node]
 
         if(not(register[node][0])):
@@ -219,11 +211,13 @@ def dijkstraAlg2(matrix, ini_node, goal):
                 matrix_distance , value = matrix.get(node)[e]   #Vecinos registrados en la tabla
                 
                 actual_distance = register[value][1]
-                new_distance = matrix_distance + register[node][1]
+                new_distance = matrix_distance + register[node][1]  
                 
                 if(actual_distance > new_distance):
                     register[value][1] = new_distance
-                    register[node][2] = node
+                    register[value][2] = node
+
+            print(register)    
 
 
 
@@ -242,3 +236,4 @@ lista2 = deque(['A'])
 
 #print(dijkstraAlg(graph2, 'A', 'B'))
 
+print(dijkstraAlg2(graph2, 'A', 'B'))
