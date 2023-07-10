@@ -180,21 +180,15 @@ def dijkstraAlg(graph, ini_node, goal):
     #
 
 def dijkstraAlg2(matrix, ini_node, goal):
-    register = {
-                ini_node : [False, 0, ini_node]  #Registra: Estado, Distancia, Nodo Anterior
-        }
-    for i in range( len(matrix.keys()) -1 ):
-            register[list(matrix.keys())[i+1]] = [False, inf, '?']  #Inicializa todos los nodos
+    register = {node: [False, 0 if node == ini_node else inf, ini_node if node == ini_node else '?'] for node in matrix.keys()}
     print(register)
 
     unexplored = [(0, ini_node)] 
-    heapq.heapify(unexplored)
-   
 
     while(True):
         print('Vueltas:')
         if(len(unexplored) == 0):
-            return -1
+            return 'Node Not found -1'
         
         priority, node = heapq.heappop(unexplored) #Tomar el nodo con mayor prioridad de la cola
         print(node)
@@ -207,17 +201,17 @@ def dijkstraAlg2(matrix, ini_node, goal):
             register[node][0] = True #Marcamos al nodo, como visitado
 
             for e in range(len(matrix.get(node))):
-                heapq.heappush(unexplored, matrix.get(node)[e])   #Agregar los vecino del nodo
                 matrix_distance , value = matrix.get(node)[e]   #Vecinos registrados en la tabla
-                
                 actual_distance = register[value][1]
                 new_distance = matrix_distance + register[node][1]  
                 
                 if(actual_distance > new_distance):
                     register[value][1] = new_distance
                     register[value][2] = node
+                    heapq.heappush(unexplored, (new_distance , value))  #Agregar los vecino del nodo
 
-            print(register)    
+            #print(register)
+            #print(unexplored)
 
 
 
