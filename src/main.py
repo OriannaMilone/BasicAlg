@@ -24,6 +24,16 @@ graph2 = {
 'F': [(2, 'A'), (5, 'G'), (6, 'B'), (3, 'E'), (2, 'C')]
 }
 
+matrix1 = [[0, 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
+          ['A', 0, '', 3, '', '', 2, ''],
+          ['B', '', 0, '', 1, 2, 6, 2],
+          ['C', 3, '', 0, 4, 1, 2, ''],
+          ['D', '', 1, 4, 0, '', '', ''],
+          ['E', '', 2, 1, '', 0, 3, ''],
+          ['F', 2, 6, 2, '', 3, 0, 5],
+          ['G', '', 2, '', '', '', 5, 0],
+          ]
+
 array1 = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
 
 inf = 100000000000
@@ -144,7 +154,7 @@ def dijkstraAlg(graph, ini_node, goal):
     heapq.heapify(unexplored)   # Cola de prioridad
 
     while(unexplored):   
-        current_distance , node = heapq.heappop(unexplored) #Selecciona el elemento con mayor prioridad en la cola
+        current_distance , node = heapq.heappop(unexplored) #Selecciona elemento con mayor prioridad en la cola
         
         print(f"Seleccionando nodo: {node}, distancia: {current_distance}")
         
@@ -167,7 +177,53 @@ def dijkstraAlg(graph, ini_node, goal):
          
     return matrix.get(goal)    
 
+    #
 
+
+matrix2 = {
+'A': [(3, 'C'), (2, 'F')] ,  
+'B': [(6, 'F'), (2, 'G'), (1, 'D'), (2, 'E')] , 
+'C': [(3, 'A'), (2, 'F'), (1, 'E'), (4, 'D')] , 
+'D': [(1, 'B'), (4, 'C')] , 
+'E': [(2, 'B'), (1, 'C'), (3, 'F')] , 
+'G': [(5, 'F'), (2, 'B')] ,
+'F': [(2, 'A'), (5, 'G'), (6, 'B'), (3, 'E'), (2, 'C')]
+}
+
+def dijkstraAlg2(matrix, ini_node, goal):
+    #La matriz, contiene, los nodos, con sus vecinos y pesos
+    register = {
+                ini_node : [False, 0, ini_node]  
+        }
+    for i in range( len(matrix.keys()) -1 ):
+            register[list(matrix.keys())[i+1]] = [False, inf, '?']
+
+
+    unexplored = [(0, ini_node)] 
+    heapq.heapify(unexplored)
+
+    while(True):
+        if(len(unexplored == 0)):
+            return -1
+        
+        priority, node = heapq.heappop(unexplored) #Tomar el nodo con mayor prioridad de la cola
+
+        if(node == goal):
+            return register[node]
+
+        if(not(register[node][0])):
+            register[node][0] = True #Marcamos al nodo, como visitado
+
+            for e in range(len(matrix.get(node))):
+                heapq.heappush(unexplored, matrix.get(node)[e])   #Agregar los vecino del nodo
+                matrix_distance , value = matrix.get(node)[e]   #Vecinos registrados en la tabla
+                
+                actual_distance = register[value][1]
+                new_distance = matrix_distance + register[node][1]
+                
+                if(actual_distance > new_distance):
+                    register[value][1] = new_distance
+                    register[node][2] = node
 
 
 
@@ -177,7 +233,6 @@ explorados = []
 #print(dfsAlgRecursive(graph1, lista, explorados, 'A', 'I'))
 #print(dfsAlgIterative(graph1, 'A', 'I'))
 
-
 lista2 = deque(['A']) 
 #print(bfsAlgRecursive(graph1, explorados, lista2, 'A', 'I'))
 #print(bfsAlgIterative(graph1, 'A', 'I'))
@@ -185,5 +240,5 @@ lista2 = deque(['A'])
 #print(binarySAlg(array1, 23))
 #print(binaryAlgRecursive(array1, len(array1)-1, 0, 23))
 
+#print(dijkstraAlg(graph2, 'A', 'B'))
 
-print(dijkstraAlg(graph2, 'A', 'B'))
