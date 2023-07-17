@@ -13,7 +13,6 @@ graph1 = {
 'H': ['I', 'G'] ,
 'I': ['H']
 }
-
 graph2 = {
 'A': [(3, 'C'), (2, 'F')] ,  
 'B': [(6, 'F'), (2, 'G'), (1, 'D'), (2, 'E')] , 
@@ -23,6 +22,16 @@ graph2 = {
 'G': [(5, 'F'), (2, 'B')] ,
 'F': [(2, 'A'), (5, 'G'), (6, 'B'), (3, 'E'), (2, 'C')]
 }
+
+coordinates_graph2 = {
+    'A': (3,1) ,  
+    'B': (1,7) , 
+    'C': (4,2) , 
+    'D': (6,5) , 
+    'E': (2.3,4) , 
+    'G': (1.5,4) ,
+    'F': (2,2)
+    }
 
 matrix1 = [[0, 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
           ['A', 0, '', 3, '', '', 2, ''],
@@ -37,6 +46,10 @@ matrix1 = [[0, 'A', 'B', 'C', 'D', 'E', 'F', 'G'],
 array1 = [2, 5, 8, 12, 16, 23, 38, 56, 72, 91]
 
 inf = math.inf
+
+lista = ['A']
+explorados = []
+lista2 = deque(['A']) 
 
 # Busquedas en profundidad
 def dfsAlgIterative(graph, ini_nod, obj_nod):
@@ -142,7 +155,7 @@ def binaryAlgRecursive(array, p_right, p_left ,target):
        if(array[mid] < target):
             return binaryAlgRecursive(array, p_right, mid+1, target)
 
-
+#Dijkstra (Busqueda sobre un grafo pesado)
 def dijkstraAlg(graph, ini_node, goal):
     matrix = {
         ini_node : [False, 0, str(ini_node)] #Matriz (Nodos: [Edo, Dist, Prev])
@@ -178,9 +191,9 @@ def dijkstraAlg(graph, ini_node, goal):
     return matrix.get(goal)    
 
     #
-
 def dijkstraAlg2(matrix, ini_node, goal):
-    register = {node: [False, 0 if node == ini_node else inf, ini_node if node == ini_node else '?'] for node in matrix.keys()}
+    register = {node: [False, 0 if node == ini_node else inf, ini_node if node == ini_node else '?']
+                 for node in matrix.keys()}
     print(register)
 
     unexplored = [(0, ini_node)] 
@@ -213,15 +226,50 @@ def dijkstraAlg2(matrix, ini_node, goal):
             #print(register)
             #print(unexplored)
 
+#A* (Busqueda sobre un grafo pesado, implementando heuristicas)
+def A_starAlg(matrix, ini_node, goal, coordinates):
+    if(goal not in matrix):
+        return -1
+    heuristic = {node: math.dist(coordinates[node], coordinates[goal]) for node in matrix.keys()}
+
+    register = {node: [False, 0 if node == ini_node else inf, ini_node if node == ini_node else '?']
+                 for node in matrix.keys()}
+    print(register)
+
+    unexplored = [(0, ini_node)] 
+
+    while(True):
+        print('Vueltas:')
+        if(len(unexplored) == 0):
+            return 'Node Not found -1'
+        
+        priority, node = heapq.heappop(unexplored) #Tomar el nodo con mayor prioridad de la cola
+        print(node)
+
+        if(node == goal):
+            register[node][0] = True
+            return register[node]
+
+        if(not(register[node][0])):
+            register[node][0] = True #Marcamos al nodo, como visitado
+
+            for e in range(len(matrix.get(node))):
+                matrix_distance , value = matrix.get(node)[e]   #Vecinos registrados en la tabla
+                actual_distance = register[value][1]
+                new_distance = matrix_distance + register[node][1] + heuristic[value]
+                
+                if(actual_distance > new_distance):
+                    register[value][1] = new_distance
+                    register[value][2] = node
+                    heapq.heappush(unexplored, (new_distance , value)) 
+
+            print(register)
+            print(unexplored)
 
 
-
-lista = ['A']
-explorados = []
 #print(dfsAlgRecursive(graph1, lista, explorados, 'A', 'I'))
 #print(dfsAlgIterative(graph1, 'A', 'I'))
 
-lista2 = deque(['A']) 
 #print(bfsAlgRecursive(graph1, explorados, lista2, 'A', 'I'))
 #print(bfsAlgIterative(graph1, 'A', 'I'))
 
@@ -230,4 +278,6 @@ lista2 = deque(['A'])
 
 #print(dijkstraAlg(graph2, 'A', 'B'))
 
-print(dijkstraAlg2(graph2, 'A', 'B'))
+#print(dijkstraAlg2(graph2, 'A', 'B'))
+
+#print(A_starAlg(graph2, 'A', 'B', coordinates_graph2))
