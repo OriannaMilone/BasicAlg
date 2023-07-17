@@ -22,6 +22,14 @@ graph2 = {
 'G': [(5, 'F'), (2, 'B')] ,
 'F': [(2, 'A'), (5, 'G'), (6, 'B'), (3, 'E'), (2, 'C')]
 }
+graph3 = { #Grafo dirgido
+    'S': [(8, 'E'), (10, 'A')],
+    'E': [(1, 'D')],
+    'A': [(2, 'C')],
+    'D': [(-4, 'A'), (-1, 'C')],
+    'C': [(-2, 'B')],
+    'B': [(1, 'A')]
+}
 
 coordinates_graph2 = {
     'A': (3,1) ,  
@@ -266,6 +274,42 @@ def A_starAlg(matrix, ini_node, goal, coordinates):
             print(register)
             print(unexplored)
 
+#Bellman-Ford
+def Bellman_FordAlg(ini_node, goal, graph):
+    register = {node: [0 if node == ini_node else inf, ini_node if node == ini_node else '?'] 
+                for node in graph.keys()}
+    print(register)
+
+    count = (len(graph.keys())) -1
+
+    while count > 0:
+        for node in graph.keys():   
+            for i in range(len(graph[node])):
+                graph_distance, value = graph.get(node)[i]
+                new_distance = graph_distance + register[node][0]
+            
+                if(new_distance < register[value][0]):
+                    register[value][0] = new_distance
+                    register[value][1] = node
+            
+        count -= 1
+        print(register)
+
+    #Checking for negative cycles
+    for node in graph.keys():   
+        for i in range(len(graph[node])):
+            graph_distance, value = graph.get(node)[i]
+            new_distance = graph_distance + register[node][0]
+            
+            if(new_distance < register[value][0]): #If the list keeps updating, there is a neg cycle
+                return 'Negative Cycle detected. Error.'
+    
+    if(goal not in graph.keys()):
+         return 'Target not found: -1' 
+    if(register[goal][0] < inf):
+        return f'Target found: {register[goal]}'
+ 
+
 
 #print(dfsAlgRecursive(graph1, lista, explorados, 'A', 'I'))
 #print(dfsAlgIterative(graph1, 'A', 'I'))
@@ -281,3 +325,5 @@ def A_starAlg(matrix, ini_node, goal, coordinates):
 #print(dijkstraAlg2(graph2, 'A', 'B'))
 
 #print(A_starAlg(graph2, 'A', 'B', coordinates_graph2))
+
+#print(Bellman_FordAlg('S', 'B', graph3))
