@@ -42,9 +42,38 @@ def mergeAlg(array1, array2):
         array3.append(array2[0])
     
     return array3
-         
-def bubbleSort():
-    
+
+'''         
+def bubbleSort(array):
+    print(array)
+    if(len(array) == 0): 
+        return array
+    else:
+       
+        pointerOne = 0
+        pointerTwo = 1
+        
+        for i in range(len(array) -1):
+            
+            print(f'P1: {array[pointerOne]}')
+            print(f'P2: {array[pointerTwo]}')
+
+            if(array[pointerOne] > array[pointerTwo]):
+                print('Change')
+                aux = array[pointerTwo]
+                array[pointerTwo] = array[pointerOne]
+                array[pointerOne] = aux
+            
+            pointerOne = pointerTwo 
+            pointerTwo += 1
+            
+            print(array)
+            counter -= 1
+        return array
+                
+        
+print(bubbleSort(arreglo)) 
+'''                
 #print(mergeSortAlg(arreglo))
 
 
