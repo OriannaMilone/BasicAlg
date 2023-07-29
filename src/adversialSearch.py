@@ -17,8 +17,8 @@
 # player() = Return the players turn
 # action() = set of possible actions
 # terminal() = checks if the game is over
-# result() =
-# utility() =
+# result() = takes the board (in its current state) + an action, and generates a new state on the board
+# utility() = evaluates the state/score (Recursive situation)
 
 # start() = initialize the board, and call the functions terminal-action-player
 

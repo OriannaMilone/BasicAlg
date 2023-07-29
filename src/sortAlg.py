@@ -1,14 +1,13 @@
 '''
 Insertion
-Quick
 Tim
 '''
-arreglo = [2, 23, 1, 14, 7, 9, 20]
-arreglon = [2, 3, 45, 14, 88, 10, 22, 8]
+arreglo = [2, 23, 1, 14, 9, 20, 5]
+arreglon = [-2, 1, -1, 3, -45, 14, 88, 10, 22, -8]
 arreglito = [6, 9, 1, 15, 70, 12, 89, 100]
 
 #Merge Sort Alg
-def mergeSortAlg(array):  #Divide y venceras Typo
+def mergeSortAlg(array):  #Divide and Conquer Typo
     arrayleft = []
     arrayright = []
     #Base case:
@@ -63,14 +62,42 @@ def bubbleSort(array):
             counter -= 1
        
     return array
-           
+#Quick Sort Alg 
+def quickSort(array, beg, end): #Divide and Conquer Typo
+    array = array[beg:end]
+   
+    if(len(array) <= 1): 
+      return array
+    else:    
+        pivot = array.pop((len(array)//2)) #Middle element
+        i = -1
+        for j in range(len(array)):
+            if(array[j] < pivot):
+                i += 1
+                temp = array[j]
+                array[j] = array[i]
+                array[i] = temp
+        array.insert(i+1, pivot)
+        return quickSort(array, 0, i+1) + [pivot] +  quickSort(array, i+2, len(array))
+
+'''         
 def insertionSort(array):
+   
+   for i in range(len(array)):
+       key = array[i+1]
+       
+       i = key - 1
+       
+       while(i >= 0 | (array[i] < key)):
+        if(key < array[i]):
+                temp = array[i] 
+                array[i] = key
+                array[(i+1)] = temp
+ 
     
-    
-    return array     
-                
+   return array     
+'''  
+
+#print(quickSort(arreglito, 0, len(arreglito)))
 #print(bubbleSort(arreglo))   
 #print(mergeSortAlg(arreglo))
-
-
-
