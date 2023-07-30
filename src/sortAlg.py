@@ -1,9 +1,10 @@
 '''
-Insertion
 Tim
 '''
+MIN_RUN_SIZE = 32
+
 arreglo = [2, 23, 1, 14, 9, 20, 5]
-arreglon = [-2, 1, -1, 3, -45, 14, 88, 10, 22, -8]
+arreglon = [-2, 1, -1, 3, -45, 14, 88, 10, 22, -8, 12, 4, 56, 16, -5, 15, 27]
 arreglito = [6, 9, 1, 15, 70, 12, 89, 100]
 
 #Merge Sort Alg
@@ -40,6 +41,7 @@ def mergeAlg(array1, array2):
         array3.append(array2[0])
     
     return array3
+
 #Bubble Sort Alg   
 def bubbleSort(array):
     if(len(array) == 0): 
@@ -62,6 +64,7 @@ def bubbleSort(array):
             counter -= 1
        
     return array
+
 #Quick Sort Alg 
 def quickSort(array, beg, end): #Divide and Conquer Typo
     array = array[beg:end]
@@ -80,24 +83,48 @@ def quickSort(array, beg, end): #Divide and Conquer Typo
         array.insert(i+1, pivot)
         return quickSort(array, 0, i+1) + [pivot] +  quickSort(array, i+2, len(array))
 
-'''         
+#Insertion Sort Alg    
 def insertionSort(array):
-   
-   for i in range(len(array)):
-       key = array[i+1]
-       
-       i = key - 1
-       
-       while(i >= 0 | (array[i] < key)):
-        if(key < array[i]):
-                temp = array[i] 
-                array[i] = key
-                array[(i+1)] = temp
- 
-    
+   for j in range(len(array) -1):
+        j += 1
+        i = j - 1
+        while(i >= 0):
+           if(array[j] < array[i]):
+               temp = array[i]
+               array[i] = array[j]
+               array[j] = temp
+               i -= 1
+               j -= 1
+           else:
+               break
    return array     
-'''  
 
+#def minRun(n):
+#   r = 0
+#   while(n >= MIN_RUN_SIZE):
+#       r |= n & 1
+#       n >>= 1
+#   return n + r
+
+def timSort(array): #Hybrid Alg (Merge and Insertion Sort)
+    #run_size = minRun(len(array))
+    run_size = 4
+    print(run_size)
+   
+    for i in range(len(array)):
+        subArray = [array[0:run_size-1]]
+        subArray2 = [array[run_size:]]
+    
+    a = insertionSort(subArray)
+    b = insertionSort(subArray2)
+    
+    
+    return mergeAlg(a,b) 
+
+print(arreglon)
+print(timSort(arreglon))
+
+#print(insertionSort(arreglito))
 #print(quickSort(arreglito, 0, len(arreglito)))
 #print(bubbleSort(arreglo))   
 #print(mergeSortAlg(arreglo))
