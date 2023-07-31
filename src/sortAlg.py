@@ -1,6 +1,4 @@
-'''
-Tim
-'''
+
 MIN_RUN_SIZE = 32
 
 arreglo = [2, 23, 1, 14, 9, 20, 5]
@@ -99,30 +97,38 @@ def insertionSort(array):
                break
    return array     
 
-#def minRun(n):
-#   r = 0
-#   while(n >= MIN_RUN_SIZE):
-#       r |= n & 1
-#       n >>= 1
-#   return n + r
+'''
+def minRun(n):
+    r = 0
+    while(n >= MIN_RUN_SIZE):
+        r |= n & 1
+        n >>= 1
+    return n + r
 
 def timSort(array): #Hybrid Alg (Merge and Insertion Sort)
     #run_size = minRun(len(array))
     run_size = 4
-    print(run_size)
-   
-    for i in range(len(array)):
-        subArray = [array[0:run_size-1]]
-        subArray2 = [array[run_size:]]
     
-    a = insertionSort(subArray)
-    b = insertionSort(subArray2)
-    
-    
+    for start in range(0, n, run_size):
+        end = min(start + run_size - 1, n - 1)
+        insertionSort(arr, start, end)
+        
+    size = minRun
+    while size < n:
+
+        for left in range(0, n, 2 * size):
+            mid = min(n - 1, left + size - 1)
+            right = min((left + 2 * size - 1), (n - 1))
+
+            if mid < right:
+                merge(arr, left, mid, right)
+
+        size = 2 * size
+        
     return mergeAlg(a,b) 
 
-print(arreglon)
 print(timSort(arreglon))
+'''
 
 #print(insertionSort(arreglito))
 #print(quickSort(arreglito, 0, len(arreglito)))
